@@ -15,10 +15,14 @@ function App() {
 
   if (error) {
     return <div>Error: {error.message}</div>;
+  } else if (data === null) {
+    return <div>Loading...</div>; // Add a loading state
   } else {
     return (
       <div className="App">
-        {data.map((e) => <PostCard title={e.title} body={e.body} />)}
+        {data.map((post, index) => (
+          <PostCard key={index} title={post.title} body={post.body} />
+        ))}
       </div>
     );
   }
