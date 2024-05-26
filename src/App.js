@@ -1,25 +1,27 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
+import { getPost } from './api';
 import './App.css';
+import PostCard from './components/PostCard';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getPost()
+      .then(posts => setData(posts))
+      .catch(error => setError(error)); // Catch any errors
+  }, []);
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  } else {
+    return (
+      <div className="App">
+        {data.map((e) => <PostCard title={e.title} body={e.body} />)}
+      </div>
+    );
+  }
 }
 
 export default App;
